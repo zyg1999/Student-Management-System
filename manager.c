@@ -30,7 +30,9 @@ void second_manger()
 	printf("				 ·                   6.查询教师账户信息                   ·\n");
 	printf("				 ·                   7.修改管理员密码                     ·\n");
 	printf("				 ·                   8.初始化管理员密码                   ·\n");
-	printf("				 ·                   9.退  出  登  录                     ·\n");
+	printf("				 ·                   9.统计学生注册人数                   ·\n");
+	printf("				 ·                  10.统计教师注册人数                   ·\n");
+	printf("				 ·                  11.退  出  登  录                     ·\n");
 	printf("				 ·                   0.退  出  系  统                     ·\n");
 	printf("				 ------------------------------------------------------------\n");
 }
@@ -406,6 +408,17 @@ void Modify_man()
 	fclose(fp);
 }
 //修改管理员密码
+int Count(Account *pHead){
+	int n=0;
+	Account *ptemp = pHead->next;
+	while (ptemp) {
+		ptemp = ptemp->next;
+		n++;
+	}
+	return n;
+	
+}
+//统计注册人数
 void man_select()
 {
 	Account *pHead;
@@ -413,7 +426,7 @@ void man_select()
 	do {
 		system("cls");
 		second_manger();
-		goto_xy(50, 14);
+		goto_xy(50, 16);
 		printf("请输入您的选择：");
 		scanf("%s", a);
 		Sleep(1000);
@@ -470,6 +483,24 @@ void man_select()
 			getch();
 		}
 		else if (strcmp("9", a) == 0)
+		{
+			int n;
+			pHead = Read_stureg();
+			n = Count(pHead);
+			printf("\t\t\t\t学生注册人数为：%d\n", n);
+			printf("\t\t\t\t继续请按任意键!");
+			getch();
+		}
+		else if (strcmp("10", a) == 0)
+		{
+			int n;
+			pHead = Read_teareg();
+			n = Count(pHead);
+			printf("\t\t\t\t教师注册人数为：%d\n", n);
+			printf("\t\t\t\t继续请按任意键!");
+			getch();
+		}
+		else if (strcmp("11", a) == 0)
 		{
 			firstselect();
 		}

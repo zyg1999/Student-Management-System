@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include<conio.h>
 #include<windows.h>
+#include <io.h>
 #ifndef STUDENT_H
 #define STUDENT_H
 
@@ -32,7 +33,6 @@ typedef struct ACCOUNT
 	char name[9];
 	char password[15];
 	struct ACCOUNT * next;
-
 }Account;
 
 Account * register_stu(Account *pHead);//Ñ§Éú×¢²á

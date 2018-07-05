@@ -60,7 +60,7 @@ void firstselect()
 		}
 		else if (strcmp("2", a) == 0)
 		{
-
+			
 			Login_stu();
 			getch();
 		}

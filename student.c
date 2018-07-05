@@ -1,5 +1,24 @@
 #include"student.h"
 
+void second_tea()
+{
+	system("cls");
+	printf("				 ------------------------------------------------------------\n");
+	printf("				 ·                     教  师  端                         ·\n");
+	printf("				 ------------------------------------------------------------\n");
+	printf("				 ·                   1.录入学生信息                       ·\n");
+	printf("				 ·                   2.增加学生信息                       ·\n");
+	printf("				 ·                   3.删除学生信息                       ·\n");
+	printf("				 ·                   4.修改学生信息                       ·\n");
+	printf("				 ·                   5.查询学生信息                       ·\n");
+	printf("				 ·                   6.输出学生信息                       ·\n");
+	printf("				 ·                   7.成 绩 分 析                        ·\n");
+	printf("				 ·                   8.外部导入信息                       ·\n");
+	printf("				 ·                   9.退 出 登 录                        ·\n");
+	printf("				 ·                   0.退 出 系 统                        ·\n");
+	printf("				 ------------------------------------------------------------\n");
+}
+//教师端菜单
 void second_stu()
 {
 	system("cls");
@@ -15,29 +34,11 @@ void second_stu()
 	printf("\t\t\t\t·                                                                  · \n");
 	printf("\t\t\t\t·                        3.退  出  登  录                          · \n");
 	printf("\t\t\t\t·                                                                  · \n");
-    printf("\t\t\t\t·                                                                  · \n");
+	printf("\t\t\t\t·                                                                  · \n");
 	printf("\t\t\t\t·                        0.退  出  系  统                          · \n");
 	printf("\t\t\t\t----------------------------------------------------------------------\n");
 }
-//学生端功能
-void second_tea()
-{
-	system("cls");
-	printf("				 ------------------------------------------------------------\n");
-	printf("				 ·                     教  师  端                         ·\n");
-	printf("				 ------------------------------------------------------------\n");
-	printf("				 ·                   1.录入学生信息                       ·\n");
-	printf("				 ·                   2.增加学生信息                       ·\n");
-	printf("				 ·                   3.删除学生信息                       ·\n");
-	printf("				 ·                   4.修改学生信息                       ·\n");
-	printf("				 ·                   5.查询学生信息                       ·\n");
-	printf("				 ·                   6.排名输出所有学生信息               ·\n");
-	printf("				 ·                   7.成 绩 分 析                        ·\n");
-	printf("				 ·                   8.退 出 登 录                        ·\n");
-	printf("				 ·                   0.退 出 系 统                        ·\n");
-	printf("				 ------------------------------------------------------------\n");
-}
-//老师端功能
+//学生端菜单
 int Lookup_stu_date(char *stunum)
 {
 	List *a;
@@ -81,7 +82,7 @@ List * Input_stu(List*pHead)
 			printf("\t\t\t\t*******************************\n");
 			printf("\t\t\t\t        学生信息录入\n");
 			printf("\t\t\t\t*******************************\n");
-			printf("请输入学生学号（输入0结束）：");
+			printf("\t\t\t\t请输入学生学号（输入0结束）：");
 			scanf("%s", pNew->node.num);
 			continue;
 		}
@@ -89,7 +90,7 @@ List * Input_stu(List*pHead)
 		{
 			if (Lookup_stu_date(pNew->node.num) == 0)
 			{
-				break;
+				break; 
 			}
 			else
 			{
@@ -224,8 +225,6 @@ List *  Increase_stu(List * pHead)
 				printf("\n");
 				printf("\t\t\t\t请输入插入学生的学号(结束输0)：");
 				scanf("%s", pNew->node.num);
-			
-		
 		}
 		
 	}
@@ -233,6 +232,120 @@ List *  Increase_stu(List * pHead)
 	return pHead;
 }
 //增加到指定位置
+List *Readdate()
+{
+	FILE *fp;;
+
+	List *pHead, *pEnd, *pNew = NULL;
+
+	pHead = (List *)malloc(sizeof(List));
+	pHead->next = NULL;
+	pEnd = pHead;
+	if ((fp = fopen("stu_date.txt", "r")) == NULL)
+	{
+		fp = fopen("stu_date.txt", "w");
+		getchar();
+
+	}
+	else
+	{
+		pNew = (List*)malloc(sizeof(List));
+		while ((fread(pNew, sizeof(List), 1, fp))>0)
+		{
+			pNew->next = NULL;
+			pEnd->next = pNew;
+			pEnd = pNew;
+			pNew = (List*)malloc(sizeof(List));
+		}
+
+	}
+	free(pNew);
+	fclose(fp);
+	return pHead;
+
+}
+//读取学生数据到链表
+void Save_date_stu(List * pHead)
+{
+	FILE *fp = NULL;
+	List * pTemp;
+	if (pHead == NULL)
+	{
+		system("cls");
+		kuang();
+		goto_xy(57, 9);
+		printf("注册信息为空！按任意键继续！\n");
+		getch();
+		return 0;
+	}
+	fp = fopen("stu_date.txt", "w+");
+	if (fp == NULL)
+	{
+		system("cls");
+		kuang();
+		goto_xy(57, 9);
+		printf("文件打开失败！按任意键继续！\n");
+		getch();
+	}
+	pTemp = pHead->next;
+	while (pTemp != NULL)
+	{
+
+		fwrite(pTemp, sizeof(List), 1, fp);
+		pTemp = pTemp->next;
+	}
+	fflush(fp);
+	fclose(fp);
+	printf("\t\t\t\t保存成功!按任意键继续！\n");
+	getch();
+	return;
+}
+//保存数据到文件
+void  Query(List * pHead)
+{
+	List * ptemp = pHead;
+	char n[9];
+	int flag = 1;
+	while (flag)
+	{
+
+		printf("\t\t\t\t*******************************\n");
+		printf("\t\t\t\t        学生信息查询\n");
+		printf("\t\t\t\t*******************************\n");
+		printf("\t\t\t\t请输入学生学号：");
+		scanf("%s", n);
+		if (judge_no(n, 8) == 0)
+		{
+			printf("\t\t\t\t学号必须为8位数字！请重输\n");
+			Sleep(1000);
+			system("cls");
+			second_tea();
+			continue;
+		}
+		else
+			flag = 0;
+	}
+	while (ptemp&&strcmp(ptemp->node.num, n) != 0)
+		ptemp = ptemp->next;
+	if (ptemp == NULL)
+	{
+		printf("\t\t\t\t无该学生的信息\n");
+		Sleep(500);
+		return NULL;
+	}
+	else
+	{
+		printf("\t\t\t\t------------------------------------\n");
+		printf("\t\t\t\t学号：%s\n", ptemp->node.num);
+		printf("\t\t\t\t姓名：%s\n", ptemp->node.name);
+		printf("\t\t\t\t性别：%s\n", ptemp->node.sex);
+		printf("\t\t\t\t出生日期：%d %d %d\n", ptemp->node.birthday.year, ptemp->node.birthday.month, ptemp->node.birthday.day);
+		printf("\t\t\t\t科目一%.2f 科目二%.2f 科目三%.2f\n", ptemp->node.score[0], ptemp->node.score[1], ptemp->node.score[2]);
+		printf("\t\t\t\t总成绩：%.2f\n", ptemp->node.sum);
+		printf("\t\t\t\t------------------------------------\n");
+	}
+}
+//教师端查询按学号
 List* Delete_stu_bynum(List * pHead)
 {
 	List * ptemp = pHead, *ptemp1 = pHead;
@@ -240,7 +353,6 @@ List* Delete_stu_bynum(List * pHead)
 	int flag = 1;
 	while (flag)
 	{
-
 		printf("\t\t\t\t*******************************\n");
 		printf("\t\t\t\t        学生信息删除\n");
 		printf("\t\t\t\t*******************************\n");
@@ -395,7 +507,6 @@ List * Modify(List *pHead)
 			}
 			else  if (!strcmp(c, "0"))
 			{
-				//system("cls");
 				break;
 			}
 			else
@@ -407,14 +518,13 @@ List * Modify(List *pHead)
 	return pHead;
 }
 //修改
-void  Query(List * pHead)
+void  Query_nameandnum(List * pHead)
 {
 	List * ptemp = pHead;
+	char name[20];
 	char n[9];
 	int flag = 1;
-	while (flag)
-	{
-
+	while (flag) {
 		printf("\t\t\t\t*******************************\n");
 		printf("\t\t\t\t        学生信息查询\n");
 		printf("\t\t\t\t*******************************\n");
@@ -428,10 +538,14 @@ void  Query(List * pHead)
 			second_tea();
 			continue;
 		}
-		else
+		else {
 			flag = 0;
+			printf("\t\t\t\t请输入学生姓名：");
+			scanf("%s",name);
+		}
 	}
-	while (ptemp&&strcmp(ptemp->node.num, n) != 0)
+	
+	while (ptemp&&strcmp(ptemp->node.num, n)&& strcmp(ptemp->node.name, name) != 0)
 		ptemp = ptemp->next;
 	if (ptemp == NULL)
 	{
@@ -451,7 +565,7 @@ void  Query(List * pHead)
 		printf("\t\t\t\t------------------------------------\n");
 	}
 }
-//教师端查询
+//教师端查询按姓名和学号
 List * Sort_by_sum(List* pHead)
 {
 	List *p, *q;
@@ -483,13 +597,42 @@ List * Sort_by_sum(List* pHead)
 	return pHead;
 }
 //总成绩降序排序
+List * Sort_by_num(List* pHead)
+{
+	List *p, *q;
+	int n = 0, i, j;
+	p = pHead;
+	while (p)
+	{
+		n++;
+		p = p->next;
+	}
+	for (i = 0; i<n - 2; i++)
+	{
+		p = pHead;
+		q = p->next;
+		for (j = 0; j<n - i - 2; j++)
+		{
+			if (strcmp(q->node.num,q->next->node.num)>0)
+			{
+				p->next = q->next;
+				q->next = q->next->next;
+				p->next->next = q;
+			}
+			p = p->next;
+			q = p->next;
+		}
+	}
+
+	return pHead;
+}
+//学号升序排序
 int judge_no(char num[], int len)
 {
 	int i;
 
 	if (strlen(num) != len)
 	{
-
 		return 0;
 	}
 	for (i = 0; i<len; i++)
@@ -497,7 +640,8 @@ int judge_no(char num[], int len)
 		if (num[i] >= '0' && num[i] <= '9');
 		else  break;
 	}
-	if (i == len) return (1);
+	if (i == len) 
+		return (1);
 	else
 	{
 		return 0;
@@ -536,77 +680,6 @@ void Analyzescore(List*pHead)
 	getch();
 }
 //成绩分析
-List *Readdate()
-{
-	FILE *fp;;
-
-	List *pHead, *pEnd, *pNew=NULL;
-
-	pHead = (List *)malloc(sizeof(List));
-	pHead->next = NULL;
-	pEnd = pHead;
-	if ((fp = fopen("stu_date.txt", "r")) == NULL)
-	{
-
-		printf("\t\t\t\t文件损坏！！\n");
-
-		getchar();
-
-	}
-	else
-	{
-		pNew = (List*)malloc(sizeof(List));
-		while ((fread(pNew, sizeof(List), 1, fp))>0)
-		{
-		 pNew->next = NULL;
-		 pEnd->next = pNew;
-		 pEnd = pNew;
-		 pNew = (List*)malloc(sizeof(List));
-		}
-
-	}
-	free(pNew);
-	fclose(fp);
-    return pHead;
-
-}
-//读取学生数据
-void Save_date_stu(List * pHead)
-{
-	FILE *fp = NULL;
-	List * pTemp;
-	if (pHead == NULL)
-	{
-		system("cls");
-		kuang();
-		goto_xy(57, 9);
-		printf("注册信息为空！按任意键继续！\n");
-		getch();
-		return 0;
-	}
-	fp = fopen("stu_date.txt", "w+");
-	if (fp == NULL)
-	{
-		system("cls");
-		kuang();
-		goto_xy(57, 9);
-		printf("文件打开失败！按任意键继续！\n");
-		getch();
-	}
-	pTemp = pHead->next;
-	while (pTemp != NULL)
-	{
-
-		fwrite(pTemp, sizeof(List), 1, fp);
-		pTemp = pTemp->next;
-	}
-	fflush(fp);
-	fclose(fp);
-	printf("\t\t\t\t保存成功!按任意键继续！\n");
-	getch();
-	return;
-}
-//保存数据到文件(复写)
 void Printf_list(List *pHead)
 {
 	int num = 1;
@@ -632,7 +705,30 @@ void Printf_list(List *pHead)
 		num++;
 	}
 }
-//打印链表信息
+//打印排名链表信息
+void Printf_numlist(List *pHead)
+{
+	List * p = pHead->next;
+	if (p == NULL)
+	{
+		printf("\t\t\t\t暂无数据!按任意键继续\n");
+		getch();
+		return 0;
+	}
+	while (p != NULL)
+	{
+		printf("\t\t\t\t------------------------------------\n");
+		printf("\t\t\t\t学号：%s\n", p->node.num);
+		printf("\t\t\t\t姓名：%s\n", p->node.name);
+		printf("\t\t\t\t性别：%s\n", p->node.sex);
+		printf("\t\t\t\t出生日期：%d %d %d\n", p->node.birthday.year, p->node.birthday.month, p->node.birthday.day);
+		printf("\t\t\t\t科目一%.2f 科目二%.2f 科目三%.2f\n", p->node.score[0], p->node.score[1], p->node.score[2]);
+		printf("\t\t\t\t总成绩：%.2f\n", p->node.sum);
+		printf("\t\t\t\t------------------------------------\n");
+		p = p->next;
+	}
+}
+//打印学号排序信息
 void Query_stu(List *pHead,char *p)
 {
 	List * ptemp = pHead;
@@ -713,6 +809,35 @@ void Exit()
 	}
 }
 //退出
+List * outsidefile(char *p)
+{
+	FILE *fp;
+	List *pNew, *pHead;
+	pHead = (List *)malloc(sizeof(List));
+	pHead->next = NULL;
+	pNew = (List *)malloc(sizeof(List));
+	
+	if (fp = fopen(p, "r") ,fp== NULL)
+	{
+		printf("\t\t\t\t文件不存在！");
+		return NULL;
+	}
+
+	while (!feof(fp))
+	{
+
+		fscanf(fp, "%s %s %s %d %d %d %f %f %f %lf", pNew->node.num, pNew->node.name, pNew->node.sex, &pNew->node.birthday.year, &pNew->node.birthday.month, &pNew->node.birthday.day, &pNew->node.score[0], &pNew->node.score[1], &pNew->node.score[2], &pNew->node.sum);
+		pNew->next = NULL;
+		pNew->next = pHead->next;
+		pHead->next = pNew;
+
+		pNew = (List *)malloc(sizeof(List));
+	}
+	free(pNew);
+	fclose(fp);
+	return pHead;
+}
+//外部导入学生信息
 void stu_select(char * p)
 {
 	List * pHead;
@@ -773,7 +898,7 @@ void tea_select()
 	do {
 		system("cls");
 		second_tea();
-		goto_xy(50, 13);
+		goto_xy(50, 14);
 		printf("请输入您的选择：");
 		scanf("%s", a);
 		Sleep(1000);
@@ -788,7 +913,7 @@ void tea_select()
 
 			pHead = Readdate();
 			pHead = Increase_stu(pHead);
-			Save_date_stu(pHead);	
+			Save_date_stu(pHead);
 		}
 		else if (strcmp("3", a) == 0)
 		{
@@ -805,16 +930,33 @@ void tea_select()
 		}
 		else if (strcmp("5", a) == 0)
 		{
+			int n;
+			printf("\t\t\t\t请选择查询方式  1.按学号查询  2.学号加名字查询：");
+			scanf("%d", &n);
 			pHead = Readdate();
-			Query(pHead);
+			if (n == 1) {
+				Query(pHead);
+			}
+			else if(n==2){
+				Query_nameandnum(pHead);
+			}
 			printf("\t\t\t\t按任意键继续！\n");
 			getch();
 		}
 		else if (strcmp("6", a) == 0)
 		{
 			pHead = Readdate();
-			pHead=Sort_by_sum(pHead);
-			Printf_list(pHead);
+			int n;
+			printf("\t\t\t\t请选择查询方式  1.按成绩降序输出  2.按学号升序输出：");
+			scanf("%d", &n);
+			if (n == 1) {
+				pHead = Sort_by_sum(pHead);
+				Printf_list(pHead);
+			}
+			else if (n == 2) {
+				pHead=Sort_by_num(pHead);
+				Printf_numlist(pHead);
+			}
 			printf("\t\t\t\t按任意键继续！\n");
 			getch();
 		}
@@ -824,6 +966,21 @@ void tea_select()
 			Analyzescore(pHead);
 		}
 		else if (strcmp("8", a) == 0)
+		{
+			char filename[50];
+			printf("\t\t\t\t请输入导入文件文件的绝对路径：");
+			scanf("%s", filename);
+			if (pHead=outsidefile(filename),pHead == NULL)
+			{
+				printf("\t\t\t\t该路径下文件不存在！按任意键继续！");
+				getch();
+			}
+			else
+			{
+				Save_date_stu(pHead);
+			}
+		}
+		else if (strcmp("9", a) == 0)
 		{
 			firstselect();
 		}
@@ -849,4 +1006,4 @@ void tea_select()
 
 
 }
-//教师 
+//教师

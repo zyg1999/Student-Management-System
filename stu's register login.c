@@ -108,7 +108,7 @@ Account * register_stu(Account *pHead)
 			goto_xy(65, 8);
 			while ((ch = getch()) != '\r')//判断回车
 			{
-				if (ch < 0)//排除上下左右键
+				if (ch <= 0)//排除上下左右键
 				{
 					getch();
 					continue;
@@ -278,13 +278,18 @@ int Matching_stu(char *stunum, char*stupass)
 		Account *a;
 		a = (Account*)malloc(sizeof(Account));
 		fread(a, sizeof(Account), 1, fp);
-		if (strcmp(a->name, stunum) == 0 && strcmp(a->password, stupass) == 0)
+		if (strcmp(a->name, stunum) == 0)
 		{
-			return 1;
-			break;
+			if (strcmp(a->password, stupass) == 0)
+			{
+				return 1;
+				break;
+			}
+			else
+				return 0;
 		}
 		else
-			return 0;
+			continue;
 	}
 	fclose(fp);
 }
@@ -299,14 +304,9 @@ Account * Readstudate()
 	pEnd = pHead;
 	if ((fp = fopen("register_stu.txt", "r")) == NULL)
 	{
-
-		printf("\t\t\t\t文件损坏！\n");
-
+		fp = fopen("register_stu.txt", "w");
 		getchar();
-
 	}
-	else
-	{
 		pNew = (Account*)malloc(sizeof(Account));
 		while ((fread(pNew, sizeof(Account), 1, fp))>0)
 		{
@@ -315,9 +315,6 @@ Account * Readstudate()
 			pEnd = pNew;
 			pNew = (Account*)malloc(sizeof(Account));
 		}
-
-	}
-	free(pNew);
 	fclose(fp);
 	return pHead;
 
@@ -329,7 +326,7 @@ void Login_stu()
 	char ch;
 	int num = 0;
 	int flag = 1;
-
+	
 	while (flag)
 	{
 		num++;

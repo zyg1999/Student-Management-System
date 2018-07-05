@@ -236,11 +236,8 @@ Account * Readteadate()
 	pEnd = pHead;
 	if ((fp = fopen("register_teacher.txt", "r")) == NULL)
 	{
-
-		printf("\t\t\t\t文件损坏！\n");
-
+		fp = fopen("register_stu.txt", "w");
 		getchar();
-
 	}
 	else
 	{
@@ -269,13 +266,18 @@ int Matching_tea(char *stunum, char*stupass)
 		Account *a;
 		a = (Account*)malloc(sizeof(Account));
 		fread(a, sizeof(Account), 1, fp);
-		if (strcmp(a->name, stunum) == 0 && strcmp(a->password, stupass) == 0)
+		if (strcmp(a->name, stunum) == 0)
 		{
-			return 1;
-			break;
+			if (strcmp(a->password, stupass) == 0)
+			{
+				return 1;
+				break;
+			}
+			else
+				return 0;
 		}
 		else
-			return 0;
+			continue;
 	}
 	fclose(fp);
 }
